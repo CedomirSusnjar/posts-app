@@ -1,5 +1,10 @@
 module.exports = {
   images: {
-    domains: ['a57.foxsports.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*',
+      },
+    ],
   },
 }

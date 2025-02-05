@@ -8,15 +8,16 @@ export type Article = {
     urlToImage: string;
     publishedAt: string;
     content: string;
-}
+    isFavourite?: boolean;
+};
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const ArticlesList = ({ news }: any) => {
+export const ArticlesList = ({ news, markAsFavouriteHandler }: any) => {
     return (
-        <div className='flex flex-col gap-4 items-center'>
+        <div className='flex flex-wrap justify-start gap-5'>
             {news.map((article: Article) => {
                 return (
-                    <Article key={article.title} {...article} />
+                    <Article key={article.title} markAsFavouriteHandler={markAsFavouriteHandler} {...article} />
                 );
             })}
         </div>
