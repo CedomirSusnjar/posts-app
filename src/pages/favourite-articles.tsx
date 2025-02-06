@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Article, ArticlesList } from "@/components/articles/ArticlesList";
+import { ArticlesList } from "@/components/articles/ArticlesList";
 import { Header } from "@/components/header";
 import Head from "next/head";
 
@@ -29,12 +29,14 @@ export default function FavouritePostsPage({ articles }: any) {
 export const getServerSideProps = async () => {
     const response = await fetch('http://localhost:3000/api/favourite-articles');
     const articles = await response.json();
-    const favourites = articles.map((article: Article) => {
+    const favourites = articles.map((article: any) => {
         return {
             ...article,
+            source: { id: null, name: article.name},
             isFavourite: true
         }
     });
+    console.log(favourites);
     return {
         props: {
             articles: favourites

@@ -8,6 +8,7 @@ export type Article = {
     urlToImage: string;
     publishedAt: string;
     content: string;
+    source: { id: string | null, name: string };
     isFavourite?: boolean;
 };
 

@@ -13,11 +13,12 @@ export type ArticleProps = {
     publishedAt: string;
     content: string;
     isFavourite?: boolean;
+    source: { id: null | string, name: string };
     markAsFavouriteHandler: (value: ArticleType) => void;
 }
 
-export const Article = ({ author, title, description, url, urlToImage, publishedAt, content, markAsFavouriteHandler, isFavourite }: ArticleProps) => {
-    const  article = { author, title, description, url, urlToImage, publishedAt, content, isFavourite };
+export const Article = ({ source, author, title, description, url, urlToImage, publishedAt, content, markAsFavouriteHandler, isFavourite }: ArticleProps) => {
+    const  article = { source, author, title, description, url, urlToImage, publishedAt, content, isFavourite };
     const [favourite, setFavourite] = useState<boolean>(isFavourite ?? false);
     console.log(isFavourite);
     const handleFavouriteClick = () => {
@@ -39,10 +40,11 @@ export const Article = ({ author, title, description, url, urlToImage, published
             </div>
             <div className="text-[12px]">{new Date(publishedAt).toDateString()} - {new Date(publishedAt).toLocaleTimeString()}</div>
             {author && <div className=" text-[12px] text-left">{author}</div>}
+            {source.name && <div className=" text-[12px] text-left">{source.name}</div>}
             <div className="mt-4 mb-4">
                 <Image width={600} height={200} className="max-h-[200]" src={urlToImage} alt='article image' />
             </div>
-            <div className="w-500 mb-4 max-h-[150px]">{description}</div>
+            <div className="w-500 mb-4 max-h-[150px] overflow-hidden text-ellipsis line-clamp-4">{description}</div>
             <a href={url} target="_blank" className="absolute bottom-4 text-[12px] underline">Click for more info</a>      
         </div>
     );

@@ -1,5 +1,3 @@
-// pages/api/seed.js
-
 import { openDb } from './db.js' 
 
 async function setup() {
@@ -10,16 +8,12 @@ async function setup() {
   await db.exec(`CREATE TABLE favourites ( 
       title TEXT,
       author TEXT,
-      urlToImage TEXT 
+      urlToImage TEXT,
+      name TEXT,
+      publishedAt TEXT,
+      description TEXT
     );
   `)
-
-  // Insert dummy data
-//   await db.run(
-//     'INSERT INTO posts (title, content) VALUES (?, ?)',
-//     'Hello World', 
-//     'My first blog post!'
-//   )
   
   // Close connection
   await db.close()  

@@ -3,19 +3,18 @@
 import { Article } from "@/components/articles/ArticlesList";
 
 export const filterPostResponse = (articles: Article[], filters: any) => {
-    console.log(filters, 'filters');
-    const { searchTerm, author, sort, direction } = filters;
+    const { searchTerm, author, sort, direction, publisher } = filters;
     let filteredArray = [...articles];
     if(searchTerm && searchTerm !== 'undefined') {
         console.log(searchTerm, 'uslo')
         filteredArray = articles.filter((article: Article) => article.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase() ?? ''));
     }
-    console.log(filteredArray);
-    console.log(author);
     if(author && author !== 'undefined') {
         filteredArray = filteredArray.filter((article: Article) => article.author === author);
     }
-    console.log(filteredArray, 'nakon author')
+    if(publisher && publisher !== 'undefined') {
+        filteredArray = filteredArray.filter((article: Article) => article.source.name === publisher);
+    }
     if(sort !== 'undefined' && direction !== 'undefined') {
         if(direction === 'asc') {
             filteredArray.sort((a: Article, b: Article) => {
@@ -27,6 +26,5 @@ export const filterPostResponse = (articles: Article[], filters: any) => {
         })
         }
     }
-    console.log(filteredArray, 'zadnje')
     return filteredArray;
 };
