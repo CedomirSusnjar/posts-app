@@ -3,6 +3,7 @@ import { Article as ArticleType } from "./ArticlesList";
 import starEmptyIcon from '../../assets/star-empty.png';
 import starIcon from '../../assets/star.png';
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export type ArticleProps = {
     author: string;
@@ -14,24 +15,30 @@ export type ArticleProps = {
     content: string;
     isFavourite?: boolean;
     source: { id: null | string, name: string };
-    markAsFavouriteHandler: (value: ArticleType) => void;
+    rowid?: string;
+    markAsFavouriteHandler?: (value: ArticleType) => void;
 }
 
-export const Article = ({ source, author, title, description, url, urlToImage, publishedAt, content, markAsFavouriteHandler, isFavourite }: ArticleProps) => {
-    const  article = { source, author, title, description, url, urlToImage, publishedAt, content, isFavourite };
+export const Article = ({ rowid, source, author, title, description, url, urlToImage, publishedAt, content, markAsFavouriteHandler, isFavourite }: ArticleProps) => {
+    const router = useRouter();
+    const  article = { rowid, source, author, title, description, url, urlToImage, publishedAt, content, isFavourite };
     const [favourite, setFavourite] = useState<boolean>(isFavourite ?? false);
-    console.log(isFavourite);
+
     const handleFavouriteClick = () => {
         if(favourite) {
-            setFavourite(false);
+            // setFavourite(false);
         } else { 
-            markAsFavouriteHandler(article);
+            markAsFavouriteHandler?.(article);
             setFavourite(true);
         }
     };
 
+    const handleArticleClick = (id: string) => {
+        router.push(`/favourite-articles/${id}`);
+    };
+
     return (
-        <div className="flex flex-col w-[450px] p-4 h-[600px] bg-[#fff] border-2 relative rounded-[6px]">
+        <article onClick={() => { handleArticleClick(article.rowid as string) }} className="flex flex-col w-[450px] p-4 h-[600px] bg-[#fff] border-2 relative rounded-[6px]">
             <div className="flex">
                 <div className="text-[28px] mb-4 flex-1 h-[130px] overflow-hidden text-ellipsis line-clamp-3">{title}</div>
                 <button title="Mark as favourite" className="w-[20px] h-[20px]" onClick={handleFavouriteClick}>
@@ -46,6 +53,6 @@ export const Article = ({ source, author, title, description, url, urlToImage, p
             </div>
             <div className="w-500 mb-4 max-h-[150px] overflow-hidden text-ellipsis line-clamp-4">{description}</div>
             <a href={url} target="_blank" className="absolute bottom-4 text-[12px] underline">Click for more info</a>      
-        </div>
+        </article>
     );
 };

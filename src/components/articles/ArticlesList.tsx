@@ -10,10 +10,15 @@ export type Article = {
     content: string;
     source: { id: string | null, name: string };
     isFavourite?: boolean;
+    rowid?: string;
 };
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const ArticlesList = ({ news, markAsFavouriteHandler }: any) => {
+export type ArticleListProps = {
+    news: Article[];
+    markAsFavouriteHandler?: (article: Article) => void;
+}
+
+export const ArticlesList = ({ news, markAsFavouriteHandler }: ArticleListProps) => {
     return (
         <div className='flex flex-wrap justify-start gap-5'>
             {news.map((article: Article) => {

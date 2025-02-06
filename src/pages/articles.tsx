@@ -1,26 +1,35 @@
-import { Input, Select } from "@/components";
+import { Input, Page, Select } from "@/components";
 import { Article, ArticlesList } from "@/components/articles/ArticlesList";
 import { IconButton } from "@/components/common-ui/button/IconButton";
-import { Header } from "@/components/header";
-import { filterPostResponse } from "@/utils/articles";
+import { getArticlesPageProps } from "@/utils/articles";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import sortIcon from '../assets/sort.png';
+import { ChangeEvent, useEffect, useState } from "react";
+import sortDownIcon from '../assets/sort-down.png';
+import sortUpIcon from '../assets/sort-up.png';
 import searchIcon from '../assets/search.png';
+import calendarIcon from '../assets/calendar.png';
 import deleteIcon from '../assets/delete.png';
 import { BounceLoader } from "react-spinners";
+import { theme } from "@/theme";
+import { GetServerSidePropsContext } from "next";
+import { ArticlesFilters } from "@/types/articlesFilters";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export default function PostsPage({ news, authors, publishers }: any) {
-    const [items, setItems] = useState<any[]>(news);
+export type PostPageProps = {
+    news: Article[];
+    authors: string[];
+    publishers: string[];
+};
+
+export default function PostsPage({ news, authors, publishers }: PostPageProps) {
+    const [items, setItems] = useState<Article[]>(news);
     const [loading, setLoading] = useState<boolean>(false);
 
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>(router.query.searchTerm as string ?? '');
     const [sortDirection, setSortDirection] = useState<string>(router.query.searchTerm as string ?? 'asc');
 
-    const handleSearchTermChange = (event: any) => {
+    const handleSearchTermChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value)
     };
 
@@ -30,13 +39,13 @@ export default function PostsPage({ news, authors, publishers }: any) {
         router.push(router);
     };
 
-    const handleSelectAuthor = (event: any) => {
+    const handleSelectAuthor = (event: ChangeEvent<HTMLSelectElement>) => {
         setLoading(true);
         router.query.author = event.target.value;
         router.push(router);
     };
 
-     const handleSelectPublisher = (event: any) => {
+     const handleSelectPublisher = (event: ChangeEvent<HTMLSelectElement>) => {
         setLoading(true);
         router.query.publisher = event.target.value;
         router.push(router);
@@ -77,19 +86,20 @@ export default function PostsPage({ news, authors, publishers }: any) {
     };
 
     const markAsFavouriteHandler = async (article: Article) => {
-        const response = await fetch(`/api/mark-article-favourite`, {
-            method: 'POST',
-            body: JSON.stringify({
-                article: article
-            })
-        });
-        const data = await response.json();
-
-        console.log(data);
+        try {
+            await fetch(`/api/mark-article-favourite`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    article: article
+                })
+            });
+        } catch(error: unknown) {
+            console.error(error);
+        }
     };
 
     return (
-        <div className='flex flex-col bg-[#fff]'>
+        <Page>
             <Head>
                 <title>Articles</title>
                 <meta name="description" content="This is a description of articles page" />
@@ -98,71 +108,55 @@ export default function PostsPage({ news, authors, publishers }: any) {
                 <meta property="og:image" content="https://my-app.com/image.jpg" />
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
-            <Header />
-            <div className="pl-4 pr-3 pb-3">
-                <div className="flex w-[100%] gap-8 pb-5 pt-[130px]">
+            <h1 className="text-[28px] mb-[3rem]">
+                Here are your articles for today, enjoy...
+            </h1>
+            <div className="flex w-[100%] gap-8 pb-5">
                     <div className="flex flex-col">
                         <div className="text-[14px]">Search by title</div>
                         <div className="flex gap-2">
                             <Input onChange={handleSearchTermChange} value={searchTerm as string} />
-                            <IconButton title='Search by title' onClick={handleSearch} icon={searchIcon} />     
+                            <IconButton title='Search by title' onClick={handleSearch} icon={searchIcon} />
                         </div>
                     </div>
                     <div className="flex flex-col">
                         <div className="text-[14px]">Filter by author</div>
                         <div className="flex gap-2">
                             <Select defaultValue={router.query.author as string} onChange={handleSelectAuthor} options={authors}  />
-                            <IconButton title='Clear author filter' onClick={() => clearFilter('author')} icon={deleteIcon} />
+                            {router.query.author && <IconButton title='Clear author filter' onClick={() => clearFilter('author')} icon={deleteIcon} />}
                         </div>
                     </div>
                     <div className="flex flex-col">
                         <div className="text-[14px]">Filter by publisher</div>
                         <div className="flex gap-2">
                             <Select defaultValue={router.query.publisher as string} onChange={handleSelectPublisher} options={publishers}  />
-                            <IconButton title='Clear publisher filter' onClick={() => clearFilter('publisher')} icon={deleteIcon} />
+                            {router.query.publisher && <IconButton title='Clear publisher filter' onClick={() => clearFilter('publisher')} icon={deleteIcon} />}
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <div className="text-[14px]">Sort by date</div>
-                        <div className="flex gap-2">
-                            <IconButton title='Sort by date' onClick={handleSort} icon={sortIcon} />
+                        <div className="h-[20px]"></div>
+                        <div className="flex border-[1px] rounded-[8px] border-slate-200 pl-2 pr-2 pt-1 pb-1">
+                            <IconButton className="h-[24px] w-[32px]" title='Sort by date' onClick={handleSort} icon={calendarIcon} />
+                            <IconButton className="h-[24px]" title='Sort by date' onClick={handleSort} icon={router.query.direction === 'desc' ? sortDownIcon : sortUpIcon} />
                         </div>
                     </div>
                     <div>
-                        {loading && <BounceLoader size={32} color="#8D77AB" />}
+                        <div className="h-[20px]"></div>
+                        {loading && <BounceLoader size={32} color={`${theme.appColor}`} />}
                     </div>
-                </div>
-                <ArticlesList markAsFavouriteHandler={markAsFavouriteHandler} news={items} />
-                <div className="mt-14" />
             </div>
-        </div>
+            <ArticlesList markAsFavouriteHandler={markAsFavouriteHandler} news={items} />
+        </Page>
     );
 };
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const response = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=5466550fed754acc881cffa1c0c6a2bd').then(response => response.json());
-    const favouriteArticlesResponse = await fetch('http://localhost:3000/api/favourite-articles');
-    const favouriteArticles = await favouriteArticlesResponse.json();
+    const favouriteArticles = await fetch('http://localhost:3000/api/favourite-articles').then(response => response.json());
 
-    const responseWithFavourites = response.articles.map((article: Article) => {
-        if(favouriteArticles.find((articleF: Article) => articleF.title === article.title)) {
-            return {
-                ...article,
-                publisher: article.source.name,
-                isFavourite: true
-            } 
-        } else return {
-                ...article,
-                publisher: article.source.name,
-        }
-    })
-    const authors = [...new Set(response.articles.map((post: Article) => post.author))];
-    const publishers = [...new Set(response.articles.map((post: Article) => post.source.name))];
     return {
         props: {
-            news: filterPostResponse(responseWithFavourites, context.query),
-            authors,
-            publishers
+           ...getArticlesPageProps(response.articles, favouriteArticles, context.query as ArticlesFilters)
         }
     }
 };

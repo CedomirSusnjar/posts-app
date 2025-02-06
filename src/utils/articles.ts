@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Article } from "@/components/articles/ArticlesList";
+import { ArticlesFilters } from "@/types/articlesFilters";
 
-export const filterPostResponse = (articles: Article[], filters: any) => {
+export const filterPostResponse = (articles: Article[], filters: ArticlesFilters) => {
     const { searchTerm, author, sort, direction, publisher } = filters;
     let filteredArray = [...articles];
     if(searchTerm && searchTerm !== 'undefined') {
-        console.log(searchTerm, 'uslo')
         filteredArray = articles.filter((article: Article) => article.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase() ?? ''));
     }
     if(author && author !== 'undefined') {
@@ -27,4 +25,27 @@ export const filterPostResponse = (articles: Article[], filters: any) => {
         }
     }
     return filteredArray;
+};
+
+export const getArticlesPageProps = (articles: Article[], favouriteArticles: Article[], queryParams: ArticlesFilters) => {
+    const responseWithFavourites = articles.map((article: Article) => {
+        if(favouriteArticles.find((articleF: Article) => articleF.title === article.title)) {
+            return {
+                ...article,
+                publisher: article.source.name,
+                isFavourite: true
+            } 
+        } else return {
+                ...article,
+                publisher: article.source.name,
+        }
+    })
+    const authors = [...new Set(articles.map((post: Article) => post.author))];
+    const publishers = [...new Set(articles.map((post: Article) => post.source.name))];
+
+    return {
+        news: filterPostResponse(responseWithFavourites, queryParams),
+        authors,
+        publishers
+    }
 };

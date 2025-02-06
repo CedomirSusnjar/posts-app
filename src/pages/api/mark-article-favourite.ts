@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { NextApiRequest, NextApiResponse } from 'next';
 import { openDb } from '../../../db';
-export default async function handler(req: any, res: any) {
-    console.log(req.body);
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { article } = JSON.parse(req.body);
-    console.log(article, 'article')
     const { title, author, urlToImage, source, publishedAt, description } = article;
     const { name } = source;
     const db = await openDb();
