@@ -1,4 +1,4 @@
-export type ArticlesFilters = {
+export type CommonFilters = {
     searchTerm: string;
     author: string;
     sort: string;

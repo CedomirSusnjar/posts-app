@@ -1,5 +1,5 @@
 import { Article } from "@/components/articles/ArticlesList";
-import { ArticlesFilters } from "@/types/articlesFilters";
+import { ArticlesFilters } from "@/types/CommonFilters";
 
 export const filterPostResponse = (articles: Article[], filters: ArticlesFilters) => {
     const { searchTerm, author, sort, direction, publisher } = filters;

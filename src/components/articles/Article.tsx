@@ -1,9 +1,11 @@
+'use client'
+
 import Image from "next/image";
 import { Article as ArticleType } from "./ArticlesList";
 import starEmptyIcon from '../../assets/star-empty.png';
 import starIcon from '../../assets/star.png';
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export type ArticleProps = {
     author: string;
