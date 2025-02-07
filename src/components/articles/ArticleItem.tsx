@@ -1,11 +1,13 @@
 'use client'
 
 import Image from "next/image";
-import { Article as ArticleType } from "./ArticlesList";
 import starEmptyIcon from '../../assets/star-empty.png';
 import starIcon from '../../assets/star.png';
 import { useState } from "react";
+import { setArticleFavourite } from "@/service/article-service";
+import { Article } from "@/types";
 import { useRouter } from "next/navigation";
+import slugify from "slugify";
 
 export type ArticleProps = {
     author: string;
@@ -18,11 +20,11 @@ export type ArticleProps = {
     isFavourite?: boolean;
     source: { id: null | string, name: string };
     rowid?: string;
-    markAsFavouriteHandler?: (value: ArticleType) => void;
 }
 
-export const Article = ({ rowid, source, author, title, description, url, urlToImage, publishedAt, content, markAsFavouriteHandler, isFavourite }: ArticleProps) => {
+export const ArticleItem = ({ rowid, source, author, title, description, url, urlToImage, publishedAt, content, isFavourite }: ArticleProps) => {
     const router = useRouter();
+    
     const  article = { rowid, source, author, title, description, url, urlToImage, publishedAt, content, isFavourite };
     const [favourite, setFavourite] = useState<boolean>(isFavourite ?? false);
 
@@ -35,12 +37,22 @@ export const Article = ({ rowid, source, author, title, description, url, urlToI
         }
     };
 
-    const handleArticleClick = (id: string) => {
-        router.push(`/favourite-articles/${id}`);
+    const markAsFavouriteHandler = async (article: Article) => {
+        try {
+            await setArticleFavourite(article);
+        } catch(error: unknown) {
+            console.error(error);
+        }
+    };
+
+    const handleArticleClick = (title: string) => {
+        router.push(`http://localhost:3000/favourite-articles/${slugify(title)}`);
     };
 
     return (
-        <article onClick={() => { handleArticleClick(article.rowid as string) }} className="flex flex-col w-[450px] p-4 h-[600px] bg-[#fff] border-2 relative rounded-[6px]">
+        <article 
+        onClick={() => { handleArticleClick(article.title as string) }} 
+        className="flex flex-col w-[450px] p-4 h-[600px] bg-[#fff] border-2 relative rounded-[6px]">
             <div className="flex">
                 <div className="text-[28px] mb-4 flex-1 h-[130px] overflow-hidden text-ellipsis line-clamp-3">{title}</div>
                 <button title="Mark as favourite" className="w-[20px] h-[20px]" onClick={handleFavouriteClick}>

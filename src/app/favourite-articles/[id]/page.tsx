@@ -1,13 +1,29 @@
-import { GetServerSidePropsContext } from "next";
+import { Page } from "@/components";
 
-export default function ArticlePage() {
-    return (
-        <div>single article page</div>
-        // create html page for single article
-    );
+export const metadata = {
+    title: 'Article',
+    description: 'This is a description of single article page',
+    openGraph: {
+        title: 'Articles',
+        description: 'This is a description of single article page',
+    },
+    twitter: {
+        card: 'summary_large_image'
+    }
 };
 
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
-    console.log(context);
-    // return single article from database using /api/file.ts
+interface ArticlePageProps { 
+    params: { id: string } 
+};
+
+export default function ArticlePage({ params }: ArticlePageProps) {
+    const { id } = params;
+
+    return (
+        <Page>
+            <h1>This is single article Page. Just as example title is shown.</h1>
+            <br />
+            <h1>{id.replaceAll('-', ' ')}</h1>
+        </Page>
+    );
 };

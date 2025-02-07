@@ -1,7 +1,7 @@
-import { Article } from "@/components/articles/ArticlesList";
-import { ArticlesFilters } from "@/types/CommonFilters";
+import { Article, SortDirection } from "@/types";
+import { CommonFilters } from "@/types/CommonFilters";
 
-export const filterPostResponse = (articles: Article[], filters: ArticlesFilters) => {
+export const filterPostResponse = (articles: Article[], filters: CommonFilters) => {
     const { searchTerm, author, sort, direction, publisher } = filters;
     let filteredArray = [...articles];
     if(searchTerm && searchTerm !== 'undefined') {
@@ -14,7 +14,7 @@ export const filterPostResponse = (articles: Article[], filters: ArticlesFilters
         filteredArray = filteredArray.filter((article: Article) => article.source.name === publisher);
     }
     if(sort !== 'undefined' && direction !== 'undefined') {
-        if(direction === 'asc') {
+        if(direction === SortDirection.ASC) {
             filteredArray.sort((a: Article, b: Article) => {
                 return new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime();
             });
@@ -27,7 +27,7 @@ export const filterPostResponse = (articles: Article[], filters: ArticlesFilters
     return filteredArray;
 };
 
-export const getArticlesPageProps = (articles: Article[], favouriteArticles: Article[], queryParams: ArticlesFilters) => {
+export const getArticlesPageProps = (articles: Article[], favouriteArticles: Article[]) => {
     const responseWithFavourites = articles.map((article: Article) => {
         if(favouriteArticles.find((articleF: Article) => articleF.title === article.title)) {
             return {
@@ -44,7 +44,7 @@ export const getArticlesPageProps = (articles: Article[], favouriteArticles: Art
     const publishers = [...new Set(articles.map((post: Article) => post.source.name))];
 
     return {
-        news: filterPostResponse(responseWithFavourites, queryParams),
+        news: responseWithFavourites,
         authors,
         publishers
     }

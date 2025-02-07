@@ -1,12 +1,32 @@
-import { CommonFilters } from "@/types/CommonFilters";
-import { filterPostResponse } from "@/utils/articles";
-import { NextResponse } from "next/server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { fetchFavouriteArticles } from "@/service/article-service";
+import { fetchNewsRemoteApi } from "@/service/remote-api-service";
+import { filterPostResponse, getArticlesPageProps } from "@/utils/articles";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-    const news = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=5466550fed754acc881cffa1c0c6a2bd')
-        .then(response => response.json());
-        console.log(news);
-        return NextResponse.json(filterPostResponse(news.articles, {} as CommonFilters), {
-    status: 200,
-  });
+export async function GET(request: NextRequest) {
+    const paramsObj = parseRequestParams(request);
+
+    const response = await fetchNewsRemoteApi();
+    const favouriteArticles = await fetchFavouriteArticles();
+    const { news, authors, publishers } = getArticlesPageProps(response.articles, favouriteArticles)
+
+    const obj = {
+        news: filterPostResponse(news, paramsObj),
+        authors: authors,
+        publishers: publishers
+    };
+
+    return NextResponse.json(obj, { status: 200 });
 };
+
+const parseRequestParams = (request: NextRequest) => {
+    const url = new URL(request.url);
+    const paramsObj: any = {};
+
+    url.searchParams.forEach((value: string, key: string) => {
+        paramsObj[key] = value;
+    });
+
+    return paramsObj;
+}

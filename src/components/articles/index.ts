@@ -1,4 +1,4 @@
-import { Article  } from './Article';
-import { ArticlesList } from './ArticlesList';
+import { Article  } from './ArticleItem';
+import { ArticlesList } from './ArticleList';
 
 export { Article, ArticlesList };

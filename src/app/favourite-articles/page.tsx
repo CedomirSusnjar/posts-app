@@ -1,5 +1,7 @@
 import { Page } from "@/components";
-import { Article, ArticlesList } from "@/components/articles/ArticlesList";
+import { ArticleList } from "@/components/articles/ArticleList";
+import { fetchFavouriteArticles } from "@/service/article-service";
+import { Article } from "@/types";
 import { DbArticle } from "@/types/DbArticle";
 
 export type FavouritePostsPageProps = {
@@ -20,22 +22,28 @@ export const metadata = {
 
 export default async function FavouritePostsPage() {
 
-    const articles = await fetch('http://localhost:3000/api/favourite-articles').then(response => response.json());
-    const favourites = articles.map((article: DbArticle) => {
-        return {
-            ...article,
-            source: { id: null, name: article.name},
-            isFavourite: true,
-            id: article.rowid
-        }
-    });
+    const articles = await fetchFavouriteArticles();
+    const favourites = extendFavouriteArticles(articles);
 
     return (
         <Page>
             <h1 className="text-[34px] text-left mb-10">
                 Here are your favourite articles, enjoy!
             </h1>
-            <ArticlesList news={favourites} />
+            <ArticleList items={favourites} />
         </Page>
     );
+};
+
+const extendFavouriteArticles = (articles: DbArticle[]): Article[] => {
+    return articles.map((article: DbArticle) => {
+        return {
+            ...article,
+            source: { id: null, name: article.name},
+            isFavourite: true,
+            id: article.rowid,
+            url: '',
+            content: ''
+        }
+    });
 };
