@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ReactNode } from 'react';
 import './global.css';
 
-
-export default function Layout({ children }: any) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -18,5 +17,5 @@ export default function Layout({ children }: any) {
         {children} {/* Renders the content of each page */}
       </body>
     </html>
-  )
+  );
 }

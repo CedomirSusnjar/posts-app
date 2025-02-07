@@ -1,4 +1,3 @@
-export enum SortDirection {
-    ASC = 'asc',
-    DESC = 'desc'
-};
+import { SortDirection as SortDirectionEnum } from '@/enums';
+
+export type SortDirection = SortDirectionEnum.ASC | SortDirectionEnum.DESC;

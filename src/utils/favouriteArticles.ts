@@ -1,3 +1,1 @@
-export const getFavouriteArticlesPageProps = () => {
-
-};
+export const getFavouriteArticlesPageProps = () => {};
