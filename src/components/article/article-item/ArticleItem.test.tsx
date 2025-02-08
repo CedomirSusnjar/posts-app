@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it } from 'node:test';
+import { describe } from 'node:test';
 import '@testing-library/jest-dom';
 
 import { ArticleItem } from './ArticleItem';

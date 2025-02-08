@@ -1,5 +1,5 @@
 type ButtonProps = {
-  onClick: (event: any) => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   text: string;
 };
 

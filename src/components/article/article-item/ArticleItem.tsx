@@ -59,18 +59,18 @@ export const ArticleItem = ({
   };
   const [favourite, setFavourite] = useState<boolean>(isFavourite ?? false);
 
-  const handleFavouriteClick = (event: any) => {
+  const handleFavouriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     if (favourite) {
       // setFavourite(false); can be implemented to remove favourite mark on click
     } else {
-      markAsFavouriteHandler?.(event, article);
+      markAsFavouriteHandler?.(article);
       incrementFavouritePostsNumber();
       setFavourite(true);
     }
   };
 
-  const markAsFavouriteHandler = async (event: any, article: Article) => {
+  const markAsFavouriteHandler = async (article: Article) => {
     try {
       await setArticleFavourite(article);
     } catch (error: unknown) {
@@ -79,13 +79,13 @@ export const ArticleItem = ({
   };
 
   const handleArticleClick = () => {
-    router.push(`http://localhost:3000/favourite-articles/${slugify(title)}`);
+    router.push(`${process.env.NEXT_PUBLIC_DOMAIN}/favourite-articles/${slugify(title)}`);
   };
 
   return (
     <article
       onClick={handleArticleClick}
-      className="flex flex-col w-[450px] p-4 h-[600px] bg-white border-2 relative rounded-[6px]"
+      className="flex flex-col w-[450px] p-4 h-[600px] bg-white border-2 relative rounded-[6px] hover:cursor-pointer hover:shadow-xl"
     >
       <div className="flex">
         <div className="text-2xl mb-4 flex-1 wor overflow-hidden text-ellipsis line-clamp-4">{title}</div>

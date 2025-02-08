@@ -13,17 +13,17 @@ export const metadata = {
 };
 
 interface ArticlePageProps {
-  params: { id: string };
+  params: { title: string };
 }
 
-export default function ArticlePage({ params }: ArticlePageProps) {
-  const { id } = params;
+export default async function ArticlePage({ params }: ArticlePageProps) {
+  const { title } = await params;
 
   return (
     <Page>
       <h1>This is single article Page. Just as example title is shown.</h1>
       <br />
-      <h1>{id.replaceAll('-', ' ')}</h1>
+      <h1>{title.replaceAll('-', ' ')}</h1>
     </Page>
   );
 }

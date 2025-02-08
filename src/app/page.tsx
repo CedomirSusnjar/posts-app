@@ -1,11 +1,11 @@
 import { Page } from '@/components';
 
 export const metadata = {
-  title: 'Articles',
-  description: 'This is a description of articles page',
+  title: 'Homepage',
+  description: 'This is a description of home page',
   openGraph: {
     title: 'Articles',
-    description: 'This is a description of articles page',
+    description: 'This is a description of home page',
   },
   twitter: {
     card: 'summary_large_image',
