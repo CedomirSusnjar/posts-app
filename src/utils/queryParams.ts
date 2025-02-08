@@ -11,7 +11,7 @@ export const updateQueryParams = (
     newQuery.set(key, newQueryParams[key] as string);
   });
 
-  return `http://localhost:3000/${path}?${newQuery.toString()}`;
+  return `${process.env.NEXT_PUBLIC_DOMAIN}/${path}?${newQuery.toString()}`;
 };
 
 export const getSortDirection = (sortDirection: SortDirection) => {

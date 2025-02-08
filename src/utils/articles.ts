@@ -44,6 +44,7 @@ export const getArticlesPageProps = (
         ...article,
         publisher: article.source.name,
         isFavourite: true,
+        author: article.author === null ? 'Unknown author' : article.author,
       };
     } else
       return {
@@ -51,7 +52,16 @@ export const getArticlesPageProps = (
         publisher: article.source.name,
       };
   });
-  const authors = [...new Set(articles.map((post: Article) => post.author))];
+  const authors = [
+    ...new Set(
+      articles.map((post: Article) => {
+        if (post.author === null) {
+          return 'Unknown author';
+        }
+        return post.author;
+      }),
+    ),
+  ];
   const publishers = [...new Set(articles.map((post: Article) => post.source.name))];
 
   return {

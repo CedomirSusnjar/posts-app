@@ -13,6 +13,7 @@ import { Select, IconButton, Input } from '@/components/common-ui';
 import type { SortDirection } from '@/types';
 import { Filters, SortDirection as SortDirectionEnum } from '@/enums';
 import { ArticleFilterBox } from './article-filter-box/ArticleFilterBox';
+import { useApp } from '@/context/AppContext';
 
 type ArticleFiltersProps = {
   authors: string[];
@@ -23,6 +24,8 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
   const [loading, setLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const { favouritePostsNumber } = useApp();
 
   const [searchTerm, setSearchTerm] = useState<string>((searchParams.get(Filters.SEARCH_TERM) as string) ?? '');
   const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirectionEnum.ASC);
@@ -65,11 +68,11 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
     setLoading(true);
     const url = new URL(window.location.href);
     url.searchParams.delete(filterName);
-    router.push(`http://localhost:3000/articles/${url.search}`);
+    router.push(`${process.env.NEXT_PUBLIC_DOMAIN}/articles/${url.search}`);
   };
 
   return (
-    <div className="flex w-[100%] gap-8 pb-5">
+    <div className="flex lg:flex-row w-[100%] sm:h-[100%] lg:gap-8 sm:gap-2 pb-5 md:flex-col sm:flex-col ">
       <ArticleFilterBox title="Search by title">
         <Input onChange={handleSearchTermChange} value={searchTerm as string} />
         <IconButton title="Search by title" onClick={handleSearch} icon={searchIcon} />
@@ -98,8 +101,8 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
           />
         )}
       </ArticleFilterBox>
-      <div className="flex flex-col">
-        <div className="h-[22px]"></div>
+      <div className="flex flex-col sm:w-[max-content] lg:w-[auto]">
+        <div className="h-[22px]">Sort by date</div>
         <div className="flex border-[1px] rounded-[8px] border-slate-200 pl-2 pr-2 pt-1 pb-1">
           <IconButton className="h-[24px] w-[32px]" title="Sort by date" onClick={handleSort} icon={calendarIcon} />
           <IconButton
@@ -109,6 +112,10 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
             icon={searchParams.get(Filters.DIRECTION) === SortDirectionEnum.DESC ? sortDownIcon : sortUpIcon}
           />
         </div>
+      </div>
+      <div className="flex lg:flex-col sm:flex-row sm:gap-4 lg:gap-2 w-[max-content]">
+        <div>Favourite posts on page</div>
+        <div className="text-right font-bold">{favouritePostsNumber}</div>
       </div>
       <div>
         <div className="h-[20px]"></div>

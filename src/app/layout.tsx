@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import './global.css';
+import { AppProvider } from '@/context/AppContext';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -14,7 +15,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        {children} {/* Renders the content of each page */}
+        <AppProvider>
+          {children} {/* Renders the content of each page */}
+        </AppProvider>
       </body>
     </html>
   );

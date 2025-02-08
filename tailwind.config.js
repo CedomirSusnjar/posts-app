@@ -24,7 +24,10 @@ module.exports = {
         '7xl': '5rem', // 7x extra large font size (80px)
         '8xl': '6rem', // 8x extra large font size (96px)
       },
-      fontFamily: {},
+      screens: {
+        sm: '375px',
+        lg: '960px',
+      },
     },
   },
   plugins: [],

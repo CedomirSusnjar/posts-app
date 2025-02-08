@@ -9,11 +9,13 @@ type SelectProps = {
 export const Select = ({ defaultValue, onChange, options }: SelectProps) => {
   return (
     <select
-      defaultValue={defaultValue}
       onChange={onChange}
+      value={defaultValue === null ? '' : defaultValue}
       className="w-[300px] h-[32px] border border-slate-200 bg-white rounded-[8px] pl-2"
     >
-      <option selected={defaultValue === null} disabled hidden style={{ display: 'none' }} value=""></option>
+      <option value="" hidden>
+        Select option
+      </option>
       {options.map((option: string) => {
         return (
           <option key={option} value={option}>

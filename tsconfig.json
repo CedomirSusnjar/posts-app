@@ -29,7 +29,7 @@
     ".next/types/**/*.ts",
     "db.js",
     "src/pages/api/seed.s",
-    "eslint.config.js"
+    "eslint.config.mjs"
   ],
   "exclude": ["node_modules"]
 }

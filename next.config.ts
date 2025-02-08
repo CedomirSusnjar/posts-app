@@ -1,7 +1,8 @@
 module.exports = {
-  // experimental: {
-  //   appDir: true,
-  // },
+  eslint: {
+    dirs: ['pages', 'app'], // Run ESLint in these directories
+    ignoreDuringBuilds: true, // Ignore ESLint errors during production builds (optional)
+  },
   images: {
     remotePatterns: [
       {

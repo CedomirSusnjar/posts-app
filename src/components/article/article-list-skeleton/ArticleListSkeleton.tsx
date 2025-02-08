@@ -5,7 +5,7 @@ export const ArticleListSkeleton = () => {
   return (
     <div className="flex flex-wrap gap-5">
       {array.map(() => {
-        return <Skeleton width={450} height={600} />;
+        return <Skeleton key={Math.random()} width={450} height={600} />;
       })}
     </div>
   );
