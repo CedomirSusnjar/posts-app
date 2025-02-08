@@ -1,6 +1,6 @@
 import { openDb } from '../../db';
 
-export const addFavouriteArticle = async (
+export const addArticleToFavourites = async (
   title: string,
   author: string,
   urlToImage: string,
@@ -15,7 +15,7 @@ export const addFavouriteArticle = async (
   );
 };
 
-export const getAllFavouriteArticles = async () => {
+export const getFavouriteArticles = async () => {
   const db = await openDb();
   return await db.all('SELECT rowid, * FROM favourites');
 };

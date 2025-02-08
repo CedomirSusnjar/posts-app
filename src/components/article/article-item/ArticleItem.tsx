@@ -4,7 +4,7 @@ import Image from 'next/image';
 import starEmptyIcon from '../../../assets/star-empty.png';
 import starIcon from '../../../assets/star.png';
 import { useEffect, useState } from 'react';
-import { setArticleFavourite } from '@/service/article-service';
+import { addArticleToFavourites } from '@/service/article-service';
 import type { Article } from '@/types';
 import { useRouter } from 'next/navigation';
 import slugify from 'slugify';
@@ -42,8 +42,7 @@ export const ArticleItem = ({
     if (isFavourite) {
       incrementFavouritePostsNumber();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [incrementFavouritePostsNumber, isFavourite]);
 
   const article = {
     rowid,
@@ -72,7 +71,7 @@ export const ArticleItem = ({
 
   const markAsFavouriteHandler = async (article: Article) => {
     try {
-      await setArticleFavourite(article);
+      await addArticleToFavourites(article);
     } catch (error: unknown) {
       console.error(error);
     }

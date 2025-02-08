@@ -1,10 +1,10 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 
-type IconButtonProps = {
+interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  text: string;
-  icon: string;
-};
+  title: string;
+  icon: StaticImageData;
+}
 
 export const IconButton = ({ onClick, icon, ...props }: IconButtonProps) => {
   return (

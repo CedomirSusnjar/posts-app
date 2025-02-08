@@ -13,7 +13,7 @@ export const fetchFavouriteArticles = async (): Promise<DbArticle[]> => {
   return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favourite-articles`).then((response) => response.json());
 };
 
-export const setArticleFavourite = async (article: Article): Promise<void> => {
+export const addArticleToFavourites = async (article: Article): Promise<void> => {
   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favourite-articles`, {
     method: 'POST',
     body: JSON.stringify({

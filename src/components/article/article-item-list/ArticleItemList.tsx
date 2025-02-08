@@ -14,8 +14,7 @@ export const ArticleItemList = ({ items }: ArticleListProps) => {
 
   useEffect(() => {
     setFavouritePostsNumberHandler(items.filter((item: Article) => item.isFavourite).length);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [items, setFavouritePostsNumberHandler]);
 
   return (
     <div className="flex flex-wrap justify-start gap-5">

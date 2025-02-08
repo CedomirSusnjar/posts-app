@@ -1,4 +1,4 @@
-import { SortDirection } from '@/enums';
+import { Direction } from '@/enums';
 import type { Article, CommonFilters, DbArticle } from '@/types';
 
 export const filterPostResponse = (articles: Article[], filters: CommonFilters): Article[] => {
@@ -20,7 +20,7 @@ export const filterPostResponse = (articles: Article[], filters: CommonFilters):
   }
 
   if (sort !== 'undefined' && direction !== 'undefined') {
-    if (direction === SortDirection.DESC) {
+    if (direction === Direction.DESC) {
       filteredArray.sort((a: Article, b: Article) => {
         return new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime();
       });

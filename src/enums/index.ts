@@ -1,4 +1,4 @@
-import { SortDirection } from './sortDirection';
+import { Direction } from './direction';
 import { Filters } from './filters';
 
-export { SortDirection, Filters };
+export { Direction, Filters };

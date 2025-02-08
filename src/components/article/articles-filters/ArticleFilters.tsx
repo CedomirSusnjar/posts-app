@@ -8,11 +8,11 @@ import deleteIcon from '../../../assets/delete.png';
 import sortDownIcon from '../../../assets/sort-down.png';
 import sortUpIcon from '../../../assets/sort-up.png';
 import calendarIcon from '../../../assets/calendar.png';
-import { getSortDirection, updateQueryParams } from '@/utils/queryParams';
+import { getSortDirection, createQueryString } from '@/utils/queryParams';
 import { Select, IconButton, Input } from '@/components/common-ui';
 import type { SortDirection } from '@/types';
-import { Filters, SortDirection as SortDirectionEnum } from '@/enums';
-import { ArticleFilterBox } from './article-filter-box/ArticleFilterBox';
+import { Filters, Direction } from '@/enums';
+import { ArticleFilterBox } from '../article-filter-box/ArticleFilterBox';
 import { useApp } from '@/context/AppContext';
 
 type ArticleFiltersProps = {
@@ -28,7 +28,7 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
   const { favouritePostsNumber } = useApp();
 
   const [searchTerm, setSearchTerm] = useState<string>((searchParams.get(Filters.SEARCH_TERM) as string) ?? '');
-  const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirectionEnum.ASC);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(Direction.ASC);
 
   useEffect(() => {
     setLoading(false);
@@ -40,17 +40,17 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
 
   const handleSearch = async () => {
     setLoading(true);
-    router.push(updateQueryParams('/articles', { searchTerm: searchTerm }, searchParams));
+    router.push(createQueryString('/articles', { searchTerm: searchTerm }, searchParams));
   };
 
   const handleSelectAuthor = (event: ChangeEvent<HTMLSelectElement>) => {
     setLoading(true);
-    router.push(updateQueryParams('/articles', { author: event.target.value }, searchParams));
+    router.push(createQueryString('/articles', { author: event.target.value }, searchParams));
   };
 
   const handleSelectPublisher = (event: ChangeEvent<HTMLSelectElement>) => {
     setLoading(true);
-    router.push(updateQueryParams('/articles', { publisher: event.target.value }, searchParams));
+    router.push(createQueryString('/articles', { publisher: event.target.value }, searchParams));
   };
 
   const handleSort = () => {
@@ -61,7 +61,7 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
       sort: 'date',
       direction: tempDirection,
     };
-    router.push(updateQueryParams('/articles', sortObj, searchParams));
+    router.push(createQueryString('/articles', sortObj, searchParams));
   };
 
   const removeFilter = (filterName: string) => {
@@ -109,7 +109,7 @@ export const ArticleFilters = ({ authors, publishers }: ArticleFiltersProps) => 
             className="h-[24px]"
             title="Sort by date"
             onClick={handleSort}
-            icon={searchParams.get(Filters.DIRECTION) === SortDirectionEnum.DESC ? sortDownIcon : sortUpIcon}
+            icon={searchParams.get(Filters.DIRECTION) === Direction.DESC ? sortDownIcon : sortUpIcon}
           />
         </div>
       </div>

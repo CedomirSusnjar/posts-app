@@ -1,3 +1,3 @@
-import { SortDirection as SortDirectionEnum } from '@/enums';
+import { Direction } from '@/enums';
 
-export type SortDirection = SortDirectionEnum.ASC | SortDirectionEnum.DESC;
+export type SortDirection = Direction.ASC | Direction.DESC;
